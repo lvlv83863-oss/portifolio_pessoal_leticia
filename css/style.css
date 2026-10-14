@@ -1,0 +1,1325 @@
+/* =========================================================
+   1. VARIÁVEIS: cores, fontes e medidas (tema escuro e tema claro)
+   ========================================================= */
+
+:root {
+  --cor-fundo: #07050f;
+  --cor-superficie: #0e0b1f;
+  --cor-realce: rgba(124, 58, 237, 0.16);
+  --cor-borda: rgba(139, 92, 246, 0.25);
+  --cor-texto: #f3efff;
+  --cor-texto-suave: #b9b0d6;
+  --cor-primaria: #7c3aed;
+  --cor-primaria-escura: #6d28d9;
+  --cor-destaque: #a78bfa;
+  --cor-brilho: rgba(124, 58, 237, 0.45);
+  --cor-pilula: #120e26;
+  --fonte-base: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --fonte-manuscrita: 'Caveat', cursive;
+  --largura-max: 1140px;
+  --raio: 20px;
+  --altura-cabecalho: 72px;
+}
+
+:root[data-theme="light"] {
+  --cor-fundo: #eaf6ff;
+  --cor-superficie: rgba(255, 255, 255, 0.78);
+  --cor-realce: rgba(14, 165, 233, 0.13);
+  --cor-borda: rgba(14, 116, 190, 0.22);
+  --cor-texto: #0c2a4a;
+  --cor-texto-suave: #3d5f82;
+  --cor-primaria: #08887d;
+  --cor-primaria-escura: #25b6eb;
+  --cor-destaque: #025a5b;
+  --cor-brilho: rgba(14, 233, 222, 0.38);
+  --cor-pilula: #ffffff;
+}
+
+/* =========================================================
+   2. RESET E BASE
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--altura-cabecalho) + 16px);
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  line-height: 1.6;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+main {
+  width: 100%;
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =========================================================
+   3. UTILITÁRIOS E ÍCONES
+   ========================================================= */
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.icone {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon {
+  width: 5em;
+}
+
+.icone.cheio,
+.icone.brilho,
+.estrela {
+  fill: currentColor;
+  stroke: none;
+}
+
+.suave {
+  color: var(--cor-texto-suave);
+}
+
+.destaque {
+  color: var(--cor-destaque);
+}
+
+/* =========================================================
+   4. FUNDO ANIMADO (brilho neon)
+   ========================================================= */
+
+.fundo-neon {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fundo-neon span {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  filter: blur(110px);
+  opacity: 0.22;
+  animation: pulsar 14s ease-in-out infinite alternate;
+}
+
+.fundo-neon span:nth-child(1) {
+  width: 520px;
+  height: 520px;
+  top: 40px;
+  right: -120px;
+}
+
+.fundo-neon span:nth-child(2) {
+  width: 420px;
+  height: 420px;
+  bottom: 10%;
+  left: -140px;
+  background: #4f46e5;
+  animation-delay: -6s;
+}
+
+/* =========================================================
+   5. COMPONENTES REUTILIZÁVEIS (etiquetas, botão e bloco)
+   ========================================================= */
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+
+.etiquetas li {
+  padding: 2px 12px;
+  font-size: 0.82rem;
+  color: var(--cor-destaque);
+  background: var(--cor-realce);
+  border: 1px solid var(--cor-borda);
+  border-radius: 20px;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  font: 600 0.95rem var(--fonte-base);
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px var(--cor-brilho);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.botao:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px var(--cor-brilho);
+}
+
+.bloco {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+
+/* =========================================================
+   6. CABEÇALHO E MENU (Flexbox)
+   ========================================================= */
+
+.cabecalho {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--cor-fundo) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cabecalho__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: var(--largura-max);
+  height: var(--altura-cabecalho);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.logo .icone {
+  width: 34px;
+  height: 34px;
+  color: var(--cor-destaque);
+  filter: drop-shadow(0 0 8px var(--cor-brilho));
+}
+
+.logo small {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--cor-destaque);
+}
+
+.menu__lista {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.menu a {
+  display: block;
+  padding: 24px 14px 22px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.menu a:hover {
+  color: var(--cor-destaque);
+}
+
+.menu a.ativo {
+  color: var(--cor-destaque);
+  border-color: var(--cor-primaria);
+}
+
+/* Alternador de tema claro e escuro */
+.tema {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--cor-pilula);
+  border: 1px solid var(--cor-borda);
+  border-radius: 30px;
+}
+
+.tema button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 28px;
+  padding: 0;
+  font-size: 1rem;
+  color: var(--cor-texto-suave);
+  background: none;
+  border: 0;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.tema button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--cor-primaria);
+  box-shadow: 0 0 14px var(--cor-brilho);
+}
+
+/* =========================================================
+   7. APRESENTAÇÃO (Grid com grid-template-areas)
+   ========================================================= */
+
+.apresentacao {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-areas: "texto foto";
+  align-items: center;
+  gap: 32px;
+  min-height: 560px;
+  padding: calc(var(--altura-cabecalho) + 70px) 0 70px;
+}
+
+.apresentacao__texto {
+  grid-area: texto;
+}
+
+.apresentacao__foto {
+  grid-area: foto;
+}
+
+.apresentacao__ola {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cor-primaria);
+}
+
+.apresentacao h1 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+  font-size: clamp(3.4rem, 8vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #ffffff, #cdbfff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:root[data-theme="light"] .apresentacao h1 {
+  background: linear-gradient(180deg, var(--cor-destaque), var(--cor-primaria));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.apresentacao h1 .icone {
+  width: 42px;
+  height: 42px;
+  color: var(--cor-destaque);
+  animation: piscar 3s ease-in-out infinite;
+}
+
+.apresentacao__area {
+  margin: 6px 0 20px;
+  font-size: clamp(1.1rem, 2.6vw, 1.45rem);
+  font-weight: 500;
+}
+
+.apresentacao__resumo {
+  max-width: 520px;
+  margin-bottom: 28px;
+  opacity: 0.9;
+}
+
+/* Botões e redes sociais (Flexbox) */
+.botoes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px 26px;
+  margin-bottom: 26px;
+}
+
+.link-seta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.link-seta .icone {
+  transition: transform 0.25s;
+}
+
+.link-seta:hover .icone {
+  transform: translateX(5px);
+}
+
+.redes {
+  display: flex;
+  gap: 18px;
+}
+
+.redes a,
+.redes button {
+  display: grid;
+  padding: 0;
+  font: inherit;
+  font-size: 1.45rem;
+  color: var(--cor-texto-suave);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s, filter 0.2s;
+}
+
+.redes a:hover,
+.redes button:hover {
+  color: var(--cor-destaque);
+  transform: translateY(-3px);
+  filter: drop-shadow(0 0 8px var(--cor-brilho));
+}
+
+/* Foto com anel neon, órbita e estrelas */
+.apresentacao__foto {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 380px;
+}
+
+.anel {
+  position: relative;
+  z-index: 2;
+  width: min(300px, 72vw);
+  aspect-ratio: 1;
+  padding: 7px;
+  background: linear-gradient(135deg, #a855f7 10%, #6366f1 55%, #3b82f6);
+  border-radius: 50%;
+  box-shadow: 0 0 50px var(--cor-brilho);
+  animation: flutuar 7s ease-in-out infinite;
+}
+
+.anel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 5px solid var(--cor-fundo);
+  border-radius: 50%;
+}
+
+.orbita {
+  position: absolute;
+  inset: -6% -14%;
+  display: grid;
+  place-items: center;
+  animation: girar 70s linear infinite;
+}
+
+.orbita svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.estrela {
+  position: absolute;
+  color: var(--cor-destaque);
+  filter: drop-shadow(0 0 8px var(--cor-brilho));
+  animation: piscar 3.2s ease-in-out infinite;
+}
+
+.e1 {
+  top: 6%;
+  right: 14%;
+  width: 44px;
+  height: 44px;
+}
+
+.e2 {
+  bottom: 8%;
+  left: 7%;
+  width: 36px;
+  height: 36px;
+  color: var(--cor-primaria);
+  animation-delay: -1s;
+}
+
+.e3 {
+  top: 14%;
+  left: 14%;
+  width: 14px;
+  height: 14px;
+  animation-delay: -2s;
+}
+
+.lema {
+  position: absolute;
+  top: 6%;
+  right: -2%;
+  z-index: 3;
+  font-family: var(--fonte-manuscrita);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.05;
+  color: var(--cor-destaque);
+  text-shadow: 0 0 18px var(--cor-brilho);
+  transform: rotate(-12deg);
+}
+/* =========================================================
+   8. SEÇÕES EM GERAL (espaçamento e títulos)
+   ========================================================= */
+
+.secao {
+  padding-top: 90px;
+}
+
+.secao__titulo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.secao__titulo::after {
+  content: "";
+  flex: 1;
+  max-width: 280px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cor-primaria), transparent);
+}
+
+.secao__dica {
+  margin: -14px 0 24px;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+/* =========================================================
+   9. SOBRE MIM (Grid com grid-template-areas)
+   ========================================================= */
+
+.sobre {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr 0.7fr;
+  grid-template-areas: "texto info frase";
+  gap: 24px;
+}
+
+.sobre__texto {
+  grid-area: texto;
+}
+
+.sobre__info {
+  grid-area: info;
+}
+
+.sobre__frase {
+  grid-area: frase;
+}
+
+.sobre__texto,
+.sobre__info {
+  padding: 32px;
+}
+
+.sobre__texto p {
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+.manuscrito {
+  margin-top: 20px;
+  font-family: var(--fonte-manuscrita);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  color: var(--cor-destaque);
+  transform: rotate(-3deg);
+}
+
+.info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.info:last-child {
+  margin-bottom: 0;
+}
+
+.info__icone,
+.habilidade__icone {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  font-size: 1.3rem;
+  color: var(--cor-destaque);
+  background: var(--cor-realce);
+  border-radius: 50%;
+}
+
+.info h4 {
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.info p {
+  font-size: 0.88rem;
+}
+
+.sobre__frase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  min-height: 240px;
+  text-align: center;
+  color: #efe9ff;
+  background:
+    radial-gradient(120% 90% at 100% 0, rgba(124, 58, 237, 0.55), transparent 60%),
+    linear-gradient(160deg, #20104f, #0c0820);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+
+.sobre__frase .icone {
+  font-size: 1.9rem;
+  color: var(--cor-destaque);
+}
+
+/* =========================================================
+   10. HABILIDADES (Grid com repeat() e fr)
+   ========================================================= */
+
+.habilidades {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.habilidade {
+  display: flex;
+  gap: 16px;
+  padding: 22px;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.habilidade:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px var(--cor-brilho);
+}
+
+.habilidade__icone {
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
+}
+
+.habilidade h3 {
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.habilidade p {
+  font-size: 0.88rem;
+  color: var(--cor-texto-suave);
+}
+
+/* =========================================================
+   11. PROJETOS (Grid de cards, Flexbox dentro de cada card)
+   ========================================================= */
+
+.projetos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+  gap: 24px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.card:hover,
+.card.aberto {
+  transform: translateY(-6px);
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 30px var(--cor-brilho);
+}
+
+.card__imagem {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.card__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+
+.card__titulo {
+  font-size: 1.2rem;
+}
+
+.card__resumo {
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+/* Botão de detalhes e link do projeto (Flexbox) */
+.card__acoes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.card__botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font: 600 0.85rem var(--fonte-base);
+  color: var(--cor-texto);
+  background: var(--cor-realce);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.card__botao:hover,
+.card__botao[aria-expanded="true"] {
+  color: #fff;
+  background: var(--cor-primaria);
+}
+
+.card__botao .icone {
+  transition: transform 0.3s;
+}
+
+.card__botao[aria-expanded="true"] .icone {
+  transform: rotate(180deg);
+}
+
+.card__link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--cor-destaque);
+}
+
+/* Abre e fecha o card animando a altura (0fr para 1fr) */
+.card__detalhes {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+}
+
+.card.aberto .card__detalhes {
+  grid-template-rows: 1fr;
+}
+
+.card__detalhes-conteudo {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  padding: 0 20px;
+  transition: visibility 0.4s, padding 0.4s;
+}
+
+.card.aberto .card__detalhes-conteudo {
+  visibility: visible;
+  padding: 4px 20px 22px;
+}
+
+.card__detalhes h4 {
+  margin: 14px 0 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-destaque);
+}
+
+.card__detalhes p {
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   12. FORMAÇÃO E EXPERIÊNCIAS (Grid)
+   ========================================================= */
+
+.formacao {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.formacao__item {
+  display: flex;
+  gap: 18px;
+  padding: 24px;
+}
+
+.formacao__item h3 {
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.formacao__item p {
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.selo {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  vertical-align: middle;
+  color: var(--cor-destaque);
+  background: var(--cor-realce);
+  border: 1px solid var(--cor-borda);
+  border-radius: 20px;
+}
+
+/* =========================================================
+   13. CONTATO (Flexbox)
+   ========================================================= */
+
+.contato {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.contato__links {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.contato__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contato__lista a {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  font-weight: 500;
+  text-decoration: none;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 14px;
+  transition: transform 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.contato__lista a:hover {
+  color: var(--cor-destaque);
+  border-color: var(--cor-primaria);
+  transform: translateX(6px);
+}
+
+.contato__lista .icone {
+  font-size: 1.3rem;
+}
+
+/* Botão do e-mail: ícone e endereço juntos, clicar copia */
+.contato__email {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  font: 500 1rem var(--fonte-base);
+  color: var(--cor-texto);
+  text-align: left;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.contato__email:hover {
+  color: var(--cor-destaque);
+  border-color: var(--cor-primaria);
+  transform: translateX(6px);
+}
+
+.contato__email span {
+  overflow-wrap: anywhere;
+}
+
+.contato__email .icone {
+  font-size: 1.3rem;
+}
+
+.contato__email .contato__copiar-icone {
+  font-size: 1.05rem;
+  color: var(--cor-texto-suave);
+  opacity: 0.8;
+}
+
+/* Mensagem "E-mail copiado!" */
+.aviso-copiado {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  border-radius: 40px;
+  box-shadow: 0 12px 34px rgba(21, 128, 61, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 24px);
+  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+}
+
+.aviso-copiado.visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.aviso-copiado .icone {
+  font-size: 1.2rem;
+}
+
+/* Formulário de contato */
+.contato__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  padding: 28px;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+
+.contato__form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contato__form input,
+.contato__form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font: 0.95rem var(--fonte-base);
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  resize: vertical;
+}
+
+.contato__form .botao {
+  align-self: flex-start;
+  justify-content: center;
+}
+
+.contato__aviso {
+  min-height: 1.4em;
+  font-size: 0.88rem;
+  color: var(--cor-destaque);
+}
+
+
+
+
+
+
+/* =========================================================
+   14. RODAPÉ (Flexbox)
+   ========================================================= */
+
+.rodape {
+  margin-top: 90px;
+  padding: 30px 24px;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.rodape__conteudo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: var(--largura-max);
+  margin: 0 auto;
+}
+
+.rodape .logo {
+  font-size: 1.05rem;
+}
+
+.rodape .logo .icone {
+  width: 28px;
+  height: 28px;
+}
+
+.rodape__centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.rodape__centro .icone {
+  vertical-align: middle;
+  color: var(--cor-primaria);
+}
+
+.rodape__links {
+  display: flex;
+  gap: 18px;
+}
+
+.rodape__links a {
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+}
+
+.rodape__links a:hover {
+  color: var(--cor-destaque);
+}
+
+.topo {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  font-size: 1.2rem;
+  color: var(--cor-texto);
+  background: var(--cor-realce);
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.topo:hover {
+  color: #fff;
+  background: var(--cor-primaria);
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   15. ANIMAÇÕES
+   ========================================================= */
+
+@keyframes flutuar {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes piscar {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.78);
+  }
+}
+
+@keyframes pulsar {
+  to {
+    transform: translate(-50px, 40px) scale(1.2);
+    opacity: 0.32;
+  }
+}
+
+@keyframes fluxo {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   16. TEMA CLARO (ajustes: fundo em degradê, vidro nos cards, foto e botões)
+   ========================================================= */
+
+:root[data-theme="light"] .fundo-neon {
+  background: linear-gradient(135deg, #e0f2fe, #f5fbff, #dbeafe, #e0f7fa, #e0f2fe);
+  background-size: 300% 300%;
+  animation: fluxo 20s ease-in-out infinite;
+}
+
+:root[data-theme="light"] .fundo-neon span {
+  background: var(--cor-primaria-escura);
+  opacity: 0.38;
+}
+
+:root[data-theme="light"] .fundo-neon span:nth-child(2) {
+  background: var(--cor-primaria);
+  opacity: 0.3;
+}
+
+:root[data-theme="light"] .bloco,
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .contato__form,
+:root[data-theme="light"] .contato__lista a,
+:root[data-theme="light"] .contato__email {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(14, 116, 190, 0.1);
+}
+
+:root[data-theme="light"] .contato__form input,
+:root[data-theme="light"] .contato__form textarea {
+  background: #f3faff;
+}
+
+:root[data-theme="light"] .anel {
+  background: linear-gradient(135deg, var(--cor-primaria-escura) 10%, var(--cor-primaria) 60%, var(--cor-destaque));
+}
+
+:root[data-theme="light"] .orbita g {
+  stroke: var(--cor-primaria-escura);
+}
+
+:root[data-theme="light"] .orbita circle {
+  fill: var(--cor-primaria);
+}
+
+:root[data-theme="light"] .sobre__frase {
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0, rgba(255, 255, 255, 0.35), transparent 60%),
+    linear-gradient(160deg, var(--cor-primaria), var(--cor-destaque));
+  box-shadow: 0 14px 34px var(--cor-brilho);
+}
+
+:root[data-theme="light"] .sobre__frase .icone {
+  color: #fff;
+}
+
+/* =========================================================
+   17. RESPONSIVIDADE (tablet e celular)
+   ========================================================= */
+
+/* Tablet: até 900px */
+@media (max-width: 900px) {
+  .apresentacao {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "foto"
+      "texto";
+  }
+
+  .apresentacao__foto {
+    min-height: 340px;
+  }
+
+  .sobre {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "texto"
+      "info"
+      "frase";
+  }
+
+  .formacao {
+    grid-template-columns: 1fr;
+  }
+
+  .contato {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Celular: até 640px */
+@media (max-width: 640px) {
+  :root {
+    --altura-cabecalho: 112px;
+  }
+
+  main {
+    padding: 0 16px;
+  }
+
+  .cabecalho__barra {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px 0;
+  }
+
+  .menu {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .menu__lista {
+    justify-content: flex-start;
+  }
+
+  .menu a {
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+
+  .logo small {
+    display: none;
+  }
+
+  .sobre__texto,
+  .sobre__info {
+    padding: 22px;
+  }
+
+  .habilidades {
+    grid-template-columns: 1fr;
+  }
+
+  .card__acoes,
+  .botoes {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card__botao,
+  .botoes .botao {
+    justify-content: center;
+  }
+
+  .card__link {
+    text-align: center;
+  }
+
+  .rodape__conteudo {
+    flex-direction: column;
+  }
+}
